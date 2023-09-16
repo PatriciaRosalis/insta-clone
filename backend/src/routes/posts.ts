@@ -1,8 +1,6 @@
 import { eq } from "drizzle-orm";
 import { db } from "../../db";
-import { Post, posts } from "../../db/schema/posts";
-
-export type NewPost = typeof posts.$inferInsert;
+import { NewPost, Post, posts } from "../../db/schema/posts";
 
 export const getAllPosts = async () => {
     const allPosts = await db.select().from(posts);
@@ -23,7 +21,7 @@ export const createPost = async (body: NewPost, userId: number) => {
 
 export const updatePost = async (post: Post) => {
     await db.update(posts)
-        .set({ description: post.description })
+        .set({ description: post.description, updatedAt: new Date() })
         .where(eq(posts.id, post.id));
 
     return {};
