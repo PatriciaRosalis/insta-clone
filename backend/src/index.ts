@@ -1,5 +1,5 @@
 import { Elysia, t } from "elysia";
-import { createUser, getAllUsers } from "./routes/users";
+import { UpdateUserSchema, createUser, deleteUser, getAllUsers, updateUser } from "./routes/users";
 import { createPost, deletePost, getAllPosts, getAllPostsById, updatePost } from "./routes/posts";
 
 const app = new Elysia()
@@ -31,6 +31,10 @@ const app = new Elysia()
       password: t.String(), 
     }),
   })
+  .put("/update-user", ({ body }) => updateUser(body), {
+    body: UpdateUserSchema
+  })
+  .delete("/users/:id", ({ params: { id } }) => deleteUser(Number(id)))
   .listen(3000);
 
 console.log(
