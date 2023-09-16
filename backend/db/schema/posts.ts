@@ -6,3 +6,5 @@ export const posts = mysqlTable('posts', {
 	description: text('description'),
 	userId: int('user_id')
 });
+
+export type Post = typeof posts.$inferSelect;
