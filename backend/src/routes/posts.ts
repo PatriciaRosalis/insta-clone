@@ -31,5 +31,3 @@ export const deletePost = async (id: number) => {
     await db.delete(posts).where(eq(posts.id, id));
     return {};
 }
-
-// create updated at & createdAt

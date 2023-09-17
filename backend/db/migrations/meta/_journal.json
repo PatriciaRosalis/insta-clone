@@ -22,6 +22,20 @@
       "when": 1694903990359,
       "tag": "0002_grey_firestar",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1694969961118,
+      "tag": "0003_cooing_tag",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1694971898337,
+      "tag": "0004_square_joystick",
+      "breakpoints": true
     }
   ]
 }
