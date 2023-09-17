@@ -1,5 +1,5 @@
 import { Elysia, t } from "elysia";
-import { UpdateUserSchema, createUser, deleteUser, getAllUsers, updateUser } from "./routes/users";
+import { CreateUserSchema, LogInUserSchema, UpdateUserSchema, createUser, deleteUser, getAllUsers, signIn, updateUser } from "./routes/users";
 import { createPost, deletePost, getAllPosts, getAllPostsById, updatePost } from "./routes/posts";
 
 const app = new Elysia()
@@ -23,18 +23,15 @@ const app = new Elysia()
   })
   .delete("/posts/:id", ({ params: { id } }) => deletePost(Number(id)))
   .post("/create-user", ({ body }) => createUser(body), {
-    body: t.Object({
-      firstName: t.String(),
-      lastName: t.String(),
-      username: t.String(),
-      email: t.String(), 
-      password: t.String(), 
-    }),
+    body: CreateUserSchema,
   })
   .put("/update-user", ({ body }) => updateUser(body), {
     body: UpdateUserSchema
   })
   .delete("/users/:id", ({ params: { id } }) => deleteUser(Number(id)))
+  .post("/sign-in", ({ body }) => signIn(body), {
+    body: LogInUserSchema
+  })
   .listen(3000);
 
 console.log(
