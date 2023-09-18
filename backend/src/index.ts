@@ -2,6 +2,7 @@ import { Context, Elysia, t } from "elysia";
 import { CreateUserSchema, LogInUserSchema, UpdateUserSchema, createUser, deleteUser, getAllUsers, getProfile, signIn, updateUser } from "./routes/users";
 import { createPost, deletePost, getAllPosts, getAllPostsById, updatePost } from "./routes/posts";
 import { cookie, SetCookieOptions } from '@elysiajs/cookie';
+import { cors } from '@elysiajs/cors'
 import { jwt } from '@elysiajs/jwt';
 
 export type Handler<T> = Context & {
@@ -14,6 +15,7 @@ export type Handler<T> = Context & {
 }
 
 const app = new Elysia()
+  .use(cors())
   .use(
     jwt({
       name: 'jwt',
