@@ -1,9 +1,10 @@
 import { eq } from "drizzle-orm";
 import { db } from "../../db";
-import { NewUser, User, users } from "../../db/schema/users";
+import { users } from "../../db/schema/users";
 import { Static } from '@sinclair/typebox'
-import { t } from "elysia";
+import { t, Context } from "elysia";
 import { encryptPassword } from "../utils/password";
+import { Handler } from "..";
 
 export const CreateUserSchema = t.Object({
     email: t.String(),
@@ -72,10 +73,10 @@ export const deleteUser = async (id: number) => {
     return {};
 }
 
-export const signIn = async (body: LoginUser) => {
-    const user = await db.select().from(users).where(
-        eq(users.username, body.username)
-    );
+export const signIn = async (context: Handler<LoginUser>) => {
+    const { jwt, setCookie, body } = context;
+
+    const user = await db.select().from(users).where(eq(users.username, body.username));
 
     if (user.length === 0) {
         return new Response(undefined, {
@@ -93,5 +94,23 @@ export const signIn = async (body: LoginUser) => {
         })
     }
 
+    setCookie('auth', await jwt.sign(body), {
+        httpOnly: true,
+        maxAge: 7 * 86400,
+    });
+
     return user[0];
+}
+
+export const getProfile = async (context: Handler<LoginUser>) => {
+    const { jwt, set, cookie } = context;
+    console.log('cookie ==>', cookie.auth)
+    const profile = await jwt.verify(cookie.auth)
+
+    if (!profile) {
+        set.status = 401
+        return 'Unauthorized'
+    }
+
+    return profile;
 }
